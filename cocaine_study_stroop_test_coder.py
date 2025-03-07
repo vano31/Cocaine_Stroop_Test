@@ -4,7 +4,7 @@ import numpy, random, csv, json, os, openpyxl
 from openpyxl import Workbook
 
 
-expInfo = {'Last Name': ' ', 'First Name':' '} ###Change to subject id
+expInfo = {'Subject_ID': ' ', 'Session_Number':' '} ###Change to subject id
 expInfo['dateStr'] = data.getDateStr()
 
 ########present a dialogue to change params
@@ -15,12 +15,15 @@ if dlg.OK:
 else:
     core.quit() #the user hit cancel, so exit
 
+#########Definition of Global Clock --> Used to keep track of the time words/fixation crosses appear and disappear, and GLOBAL time the first button was clicked
+
+globalClock = core.Clock()
 
 
 ############make a csv file to store the data
-fileName = expInfo['Last Name'] + '_' + expInfo['First Name'] + '_CocaineStroopTest' + expInfo['dateStr']
+fileName = expInfo['Subject_ID'] + '_' + expInfo['Session_Number'] + '_CocaineStroopTest' + expInfo['dateStr']
 dataFile = open('data/' + fileName + '.csv', 'w') # a simple text file with comma seperated values
-dataFile.write('sequence,thisN,thisRepN,word,wordtype,number_on_screen,correctAnswer,key_pressed,correct,time_button_pressed, buttonClickedList\n')
+dataFile.write('sequence,thisN,thisRepN,word,wordtype,number_on_screen,correctAnswer,key_pressed,correct,time_button_pressed_relative, buttonClickedList, time_word_shown_global, time_button_pressed_global, time_word_gone_global, time_cross_shown_global, time_cross_gone_global \n')
 #time_fixation_cross_appeared,time_fixation_cross_stopped,duration_fixation_cross,time_word_appeared,time_word_stopped,duration_word --> Will not use these because these are frame based
 
 #############import main.xlsx
@@ -134,6 +137,7 @@ seq_3_3 = data.TrialHandler(trialList=personal_word_inserter(preseq_3_3),nReps=1
 
 #win = visual.Window(fullscr=True,allowGUI=True, checkTiming=True)
 win = visual.Window([800,800])
+#event.globalKeys.add(key=quitKey, func=forceQuit)
 welcome_message = visual.TextStim(win, pos=[0,0], text='Welcome to the Stroop Test! Press t to continue.')
 fixation_cross = visual.TextStim(win, text="+", height=1)
 instruction_1_text = 'In this task you will count the number of words you see on the screen' + '\n' + 'Then press the button as fast as you can to indicate the number of words you counted.' + '\n' + 'Let\'s practice! Press BUTTON 1 (index finger) now'
@@ -164,7 +168,7 @@ def newWordText(increment):
         counter -= 1
     return newText
   
-#Definition of Trial Clock --> This will be reset everytime a new word is shown AND will be reset whenever a button is pressed (we will collect all button press data)
+#Definition of Trial Clock --> Will reset everytime a new word is shown in order to get relative time the first button was clicked
 trialClock = core.Clock()
 
 #Definition of Loop Function
@@ -176,11 +180,13 @@ def Loop(first_seq, first_seqname, second_seq, second_seqname, third_seq, third_
     for thisIncrement in first_seq:
         
         ##Quit Button During Code
+        
         quitbutton = event.getKeys(keyList=['q'])
         if len(quitbutton) > 0:
             for a in quitbutton:
                 if a == 'q':
                     core.quit()
+        
         
         buttonsClickedList = []
         displaytext = newWordText(thisIncrement)
@@ -193,51 +199,75 @@ def Loop(first_seq, first_seqname, second_seq, second_seqname, third_seq, third_
         correctAnswer = thisIncrement["answer"]
         thisN = first_seq.thisN
         thisRepN = first_seq.thisRepN
+
         key_pressed = None
         correct = None
         sequence = first_seqname
-        time_button_pressed = None
+        time_button_pressed_relative = None
+        
+        time_word_shown_global = None
+        time_button_pressed_global = None
+        time_word_gone_global = None
+        time_cross_shown_global = None
+        time_cross_gone_global = None
+        
+       
+        time_button_pressed_global_bool = True ##Exists to make sure that the global time for only the first button press is recorded, not all the others
+        
+        
         
         ##Reset trialClock Right before image is shown for 2 seconds
         trialClock.reset()
 
         ##The 2 seconds (120 frames) where the image is shown
+        time_word_shown_global = str(globalClock.getTime())
         for x in range(120):
             
+    
             ##Quit Button During Code
             quitbutton = event.getKeys(keyList=['q'])
             if len(quitbutton) > 0:
                 for a in quitbutton:
                     if a == 'q':
                         core.quit()
+            
             
             #new_img.text = displaytext 
             new_img.draw() 
             win.flip() 
             allKeys = event.getKeys(keyList=['2','3','4','5'], timeStamped=True) 
             if len(allKeys) > 0: 
-                time_button_pressed = trialClock.getTime() 
-                allKeys[0][1] = time_button_pressed  
+                time_button_pressed_relative = str(trialClock.getTime()) 
+                allKeys[0][1] = time_button_pressed_relative  
                 buttonsClickedList.append(allKeys[0]) 
-                trialClock.reset() 
                 
+                if time_button_pressed_global_bool == True:
+                    time_button_pressed_global = str(globalClock.getTime())
+                    time_button_pressed_global_bool = False
         
+        time_word_gone_global = str(globalClock.getTime())
+        trialClock.reset() 
+                
         if len(buttonsClickedList) > 0:
             key_pressed = buttonsClickedList[0][0]
-            time_button_pressed = buttonsClickedList[0][1]
+            time_button_pressed_relative = buttonsClickedList[0][1]
         if key_pressed == None:
             correct = None
         elif int(key_pressed) == int(correctAnswer):
             correct = True
         else:
             correct = False
-            
-        json_buttonsClickedList = json.dumps(buttonsClickedList)
         
-        dataFile.write(f"{sequence},{thisN},{thisRepN},{word},{wordtype},{number_on_screen},{correctAnswer},{key_pressed},{correct},{time_button_pressed},{json_buttonsClickedList}\n")
+        #json_buttonsClickedList = json.dumps(buttonsClickedList)
+        flat = '; '.join([':: '.join(sublist) for sublist in buttonsClickedList])
+        
+        #Write data to csv file up to time_word_gone_global
+        dataFile.write(f"{sequence},{thisN},{thisRepN},{word},{wordtype},{number_on_screen},{correctAnswer},{key_pressed},{correct},{time_button_pressed_relative},{flat},{time_word_shown_global},{time_button_pressed_global},{time_word_gone_global},")
         
         ##300 ms fixation cross
+        time_cross_shown_global = str(globalClock.getTime())
         for x in range(18):
+            
             
             ##Quit Button During Code
             quitbutton = event.getKeys(keyList=['q'])
@@ -246,9 +276,15 @@ def Loop(first_seq, first_seqname, second_seq, second_seqname, third_seq, third_
                     if a == 'q':
                         core.quit()
             
+            
             fixation_cross.draw()
             win.flip()
             #Remember to record appearance of fixation cross ##Actually, maybe not...
+        time_cross_gone_global = str(globalClock.getTime())
+        
+        #Write data to csv for time_cross_shown_global and time_cross_gone_global
+        dataFile.write(f"{time_cross_shown_global},{time_cross_gone_global}\n")
+        
     
     
     
@@ -268,12 +304,14 @@ def Loop(first_seq, first_seqname, second_seq, second_seqname, third_seq, third_
     new_img = visual.TextStim(win, pos=[0,0])
     for thisIncrement in second_seq:
         
+        
         ##Quit Button During Code
         quitbutton = event.getKeys(keyList=['q'])
         if len(quitbutton) > 0:
             for a in quitbutton:
                 if a == 'q':
                     core.quit()
+        
         
         buttonsClickedList = []
         displaytext = newWordText(thisIncrement)
@@ -289,13 +327,24 @@ def Loop(first_seq, first_seqname, second_seq, second_seqname, third_seq, third_
         key_pressed = None
         correct = None
         sequence = second_seqname
-        time_button_pressed = None
+        time_button_pressed_relative = None
+        
+        time_word_shown_global = None
+        time_button_pressed_global = None
+        time_word_gone_global = None
+        time_cross_shown_global = None
+        time_cross_gone_global = None 
+        
+        time_button_pressed_global_bool = True ##Exists to make sure that the global time for only the first button press is recorded, not all the others
         
         ##Reset trialClock Right before image is shown for 2 seconds
         trialClock.reset()
 
         ##The 2 seconds (120 frames) where the image is shown
+        time_word_shown_global = str(globalClock.getTime())
         for x in range(120): 
+            
+            
             
             ##Quit Button During Code
             quitbutton = event.getKeys(keyList=['q'])
@@ -309,15 +358,21 @@ def Loop(first_seq, first_seqname, second_seq, second_seqname, third_seq, third_
             win.flip() 
             allKeys = event.getKeys(keyList=['2','3','4','5'], timeStamped=True) 
             if len(allKeys) > 0: 
-                time_button_pressed = trialClock.getTime() 
-                allKeys[0][1] = time_button_pressed  
+                time_button_pressed_relative = str(trialClock.getTime()) 
+                allKeys[0][1] = time_button_pressed_relative  
                 buttonsClickedList.append(allKeys[0]) 
-                trialClock.reset() 
+                
+                if time_button_pressed_global_bool == True:
+                    time_button_pressed_global = str(globalClock.getTime())
+                    time_button_pressed_global_bool = False
+        
+        time_word_gone_global = str(globalClock.getTime())
+        trialClock.reset() 
                 
         
         if len(buttonsClickedList) > 0:
             key_pressed = buttonsClickedList[0][0]
-            time_button_pressed = buttonsClickedList[0][1]
+            time_button_pressed_relative = buttonsClickedList[0][1]
         if key_pressed == None:
             correct = None
         elif int(key_pressed) == int(correctAnswer):
@@ -325,12 +380,15 @@ def Loop(first_seq, first_seqname, second_seq, second_seqname, third_seq, third_
         else:
             correct = False
             
-        json_buttonsClickedList = json.dumps(buttonsClickedList)
+        #json_buttonsClickedList = json.dumps(buttonsClickedList)
+        flat = '; '.join([':: '.join(sublist) for sublist in buttonsClickedList])
         
-        dataFile.write(f"{sequence},{thisN},{thisRepN},{word},{wordtype},{number_on_screen},{correctAnswer},{key_pressed},{correct},{time_button_pressed},{json_buttonsClickedList}\n")
+        dataFile.write(f"{sequence},{thisN},{thisRepN},{word},{wordtype},{number_on_screen},{correctAnswer},{key_pressed},{correct},{time_button_pressed_relative},{flat},{time_word_shown_global}, {time_button_pressed_global},{time_word_gone_global},")
         
         ##300 ms fixation cross
+        time_cross_shown_global = str(globalClock.getTime())
         for x in range(18):
+            
             
             ##Quit Button During Code
             quitbutton = event.getKeys(keyList=['q'])
@@ -339,26 +397,23 @@ def Loop(first_seq, first_seqname, second_seq, second_seqname, third_seq, third_
                     if a == 'q':
                         core.quit()
             
+            
             fixation_cross.draw()
             win.flip()
             #Remember to record appearance of fixation cross ##Actually, maybe not...
-    
+        
+        time_cross_gone_global = str(globalClock.getTime())
+        
+        #Write data to csv for time_cross_shown_global and time_cross_gone_global
+        dataFile.write(f"{time_cross_shown_global},{time_cross_gone_global}\n")
+        
             
     ##Interim Fixation Between Second and Third Loop#######################################################################################################
     for x in range(1200):
         fixation_cross.draw()
         win.flip()
         #Remember to record appearance of fixation cross ##Actually, maybe not...
-        ##Quit Button During Code
-        quitbutton = event.getKeys(keyList=['q'])
-        if len(quitbutton) > 0:
-            for a in quitbutton:
-                if a == 'q':
-                    core.quit()
-    
-    ####Third Sequence Loop################################################################################################################################
-    new_img = visual.TextStim(win, pos=[0,0])
-    for thisIncrement in third_seq:
+        
         
         ##Quit Button During Code
         quitbutton = event.getKeys(keyList=['q'])
@@ -366,6 +421,21 @@ def Loop(first_seq, first_seqname, second_seq, second_seqname, third_seq, third_
             for a in quitbutton:
                 if a == 'q':
                     core.quit()
+        
+    
+    ####Third Sequence Loop################################################################################################################################
+    new_img = visual.TextStim(win, pos=[0,0])
+    for thisIncrement in third_seq:
+        
+        
+        
+        ##Quit Button During Code
+        quitbutton = event.getKeys(keyList=['q'])
+        if len(quitbutton) > 0:
+            for a in quitbutton:
+                if a == 'q':
+                    core.quit()
+        
         
         buttonsClickedList = []
         displaytext = newWordText(thisIncrement)
@@ -381,13 +451,23 @@ def Loop(first_seq, first_seqname, second_seq, second_seqname, third_seq, third_
         key_pressed = None
         correct = None
         sequence = third_seqname
-        time_button_pressed = None
+        time_button_pressed_relative = None
+        
+        time_word_shown_global = None
+        time_button_pressed_global = None
+        time_word_gone_global = None
+        time_cross_shown_global = None
+        time_cross_gone_global = None 
+        
+        time_button_pressed_global_bool = True ##Exists to make sure that the global time for only the first button press is recorded, not all the others
         
         ##Reset trialClock Right before image is shown for 2 seconds
         trialClock.reset()
 
         ##The 2 seconds (120 frames) where the image is shown
+        time_word_shown_global = str(globalClock.getTime())
         for x in range(120): 
+            
             
             ##Quit Button During Code
             quitbutton = event.getKeys(keyList=['q'])
@@ -396,20 +476,27 @@ def Loop(first_seq, first_seqname, second_seq, second_seqname, third_seq, third_
                     if a == 'q':
                         core.quit()
             
+            
             #new_img.text = displaytext 
             new_img.draw() 
             win.flip() 
             allKeys = event.getKeys(keyList=['2','3','4','5'], timeStamped=True) 
             if len(allKeys) > 0: 
-                time_button_pressed = trialClock.getTime() 
-                allKeys[0][1] = time_button_pressed  
+                time_button_pressed_relative = str(trialClock.getTime()) 
+                allKeys[0][1] = time_button_pressed_relative  
                 buttonsClickedList.append(allKeys[0]) 
-                trialClock.reset() 
+                
+                if time_button_pressed_global_bool == True:
+                    time_button_pressed_global = str(globalClock.getTime())
+                    time_button_pressed_global_bool = False
+        
+        time_word_gone_global = str(globalClock.getTime())
+        trialClock.reset() 
                 
         
         if len(buttonsClickedList) > 0:
             key_pressed = buttonsClickedList[0][0]
-            time_button_pressed = buttonsClickedList[0][1]
+            time_button_pressed_relative = buttonsClickedList[0][1]
         if key_pressed == None:
             correct = None
         elif int(key_pressed) == int(correctAnswer):
@@ -417,12 +504,15 @@ def Loop(first_seq, first_seqname, second_seq, second_seqname, third_seq, third_
         else:
             correct = False
             
-        json_buttonsClickedList = json.dumps(buttonsClickedList)
+        #json_buttonsClickedList = json.dumps(buttonsClickedList)
+        flat = '; '.join([':: '.join(sublist) for sublist in buttonsClickedList])
         
-        dataFile.write(f"{sequence},{thisN},{thisRepN},{word},{wordtype},{number_on_screen},{correctAnswer},{key_pressed},{correct},{time_button_pressed},{json_buttonsClickedList}\n")
+        dataFile.write(f"{sequence},{thisN},{thisRepN},{word},{wordtype},{number_on_screen},{correctAnswer},{key_pressed},{correct},{time_button_pressed_relative},{flat},{time_word_shown_global}, {time_button_pressed_global},{time_word_gone_global},")
         
         ##300 ms fixation cross
+        time_cross_shown_global = str(globalClock.getTime())
         for x in range(18):
+            
             
             ##Quit Button During Code
             quitbutton = event.getKeys(keyList=['q'])
@@ -431,9 +521,14 @@ def Loop(first_seq, first_seqname, second_seq, second_seqname, third_seq, third_
                     if a == 'q':
                         core.quit()
             
+            
             fixation_cross.draw()
             win.flip()
             #Remember to record appearance of fixation cross ##Actually, maybe not...
+            
+        time_cross_gone_global = str(globalClock.getTime())
+        #Write data to csv for time_cross_shown_global and time_cross_gone_global
+        dataFile.write(f"{time_cross_shown_global},{time_cross_gone_global}\n")
     
         
 #1. Display Welcome Screen, infinite until "t" is pressed. Also create press_t eventKeys object
