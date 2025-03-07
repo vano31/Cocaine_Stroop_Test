@@ -59,21 +59,28 @@ then inserted into remaining slots.
 ###and using it to create a set of 24 words that are appeared. The new file is a unique, random location of the words
 
 def personal_word_randomizer():
-    personal_word_list = data.importConditions('personal_words/list_of_twelve_personal_words.xlsx')
+    personal_word_list = data.importConditions('personal_words/list_of_eight_personal_words.xlsx')
     
     larger_list = []
     amount = len(personal_word_list)
-    for x in range(12):
+    for x in range(8):
         random_index = random.randrange(0,len(personal_word_list))
-        larger_list.append(personal_word_list[random_index]['twelve_words'])
+        larger_list.append(personal_word_list[random_index]['eight_words'])
         personal_word_list.pop(random_index)
     
-    second_personal_word_list = data.importConditions('personal_words/list_of_twelve_personal_words.xlsx')
+    second_personal_word_list = data.importConditions('personal_words/list_of_eight_personal_words.xlsx')
     second_amount = len(second_personal_word_list)
-    for x in range(12):
+    for x in range(8):
         random_index = random.randrange(0,len(second_personal_word_list))
-        larger_list.append(second_personal_word_list[random_index]['twelve_words'])
+        larger_list.append(second_personal_word_list[random_index]['eight_words'])
         second_personal_word_list.pop(random_index)
+        
+    third_personal_word_list = data.importConditions('personal_words/list_of_eight_personal_words.xlsx')
+    third_amount = len(third_personal_word_list)
+    for x in range(8):
+        random_index = random.randrange(0,len(third_personal_word_list))
+        larger_list.append(third_personal_word_list[random_index]['eight_words'])
+        third_personal_word_list.pop(random_index)
         
     number_answer_list = [[1,2],[1,2],[4,5],[1,2],[3,4],[2,3],[4,5],[3,4],[2,3],[3,4],[2,3],[4,5],[1,2],[1,2],[3,4],[2,3],[3,4],[2,3],[2,3],[4,5],[4,5],[3,4],[4,5],[1,2]]
     
