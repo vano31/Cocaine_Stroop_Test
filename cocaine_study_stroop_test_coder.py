@@ -142,8 +142,8 @@ seq_3_2_ic = data.TrialHandler(trialList=personal_word_inserter(preseq_3_2_ic),n
 seq_3_3 = data.TrialHandler(trialList=personal_word_inserter(preseq_3_3),nReps=1,method='sequential',originPath=None)
 
 
-#win = visual.Window(fullscr=True,allowGUI=True, checkTiming=True)
-win = visual.Window([800,800])
+win = visual.Window(fullscr=True,allowGUI=True, checkTiming=True)
+#win = visual.Window([800,800])
 #event.globalKeys.add(key=quitKey, func=forceQuit)
 welcome_message = visual.TextStim(win, pos=[0,0], text='Welcome to the Stroop Test! Press t to continue.')
 fixation_cross = visual.TextStim(win, text="+", height=1)
@@ -308,7 +308,7 @@ def Loop(first_seq, first_seqname, second_seq, second_seqname, third_seq, third_
         #Remember to record appearance of fixation cross ##Actually, maybe not...
     
     ####Second Sequence Loop###############################################################################################################################
-    new_img = visual.TextStim(win, pos=[0,0])
+    new_img = visual.TextStim(win, pos=[0,0], height=0.2)
     for thisIncrement in second_seq:
         
         
@@ -431,7 +431,7 @@ def Loop(first_seq, first_seqname, second_seq, second_seqname, third_seq, third_
         
     
     ####Third Sequence Loop################################################################################################################################
-    new_img = visual.TextStim(win, pos=[0,0])
+    new_img = visual.TextStim(win, pos=[0,0], height=0.2)
     for thisIncrement in third_seq:
         
         
