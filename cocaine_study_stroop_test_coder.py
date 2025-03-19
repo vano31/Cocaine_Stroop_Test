@@ -4,12 +4,12 @@ import numpy, random, csv, json, os, openpyxl
 from openpyxl import Workbook
 
 
-expInfo = {'Subject_ID': ' ', 'Session_Number':' '} ###Change to subject id
+expInfo = {'Subject_ID': '', 'Session_Number': ''} ###Change to subject id
 expInfo['dateStr'] = data.getDateStr()
 
 ########present a dialogue to change params
 
-dlg = gui.DlgFromDict(expInfo, title='Cocaine Study Stroop Test', fixed=['dateStr'])
+dlg = gui.DlgFromDict(expInfo, title='Cocaine Study Stroop Test', fixed=['dateStr'], order=['Subject_ID','Session_Number'])
 if dlg.OK:
     toFile('lastParams.pickle', expInfo) #save params to file for next time
 else:
