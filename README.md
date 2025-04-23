@@ -5,12 +5,14 @@ The Stroop Task is a widely used cognitive task designed to assess selective att
 The Cocaine Stroop Task MRI program will be administered on a study laptop while participants are being scanned in the MRI scanner. Participants must complete the Stroop Task Training Program and the Cocaine Stroop Personalized Word List Interview prior to conducting this procedure.  
 The task records the participant’s accuracy and RT in response to congruent versus incongruent word-number stimuli, standard cocaine/crack word-number stimuli, personalized cocaine/crack word-number stimuli, neutral word-number stimuli, and emotion word-number stimuli. Personalized cocaine/crack words will be collected from the participant prior to this procedure via the Cocaine Stroop Personalized Word List Interview.
 Participants will be asked to press buttons 1 through 4 on a button-box to indicate how many times a word appears on the screen, regardless of what the word says. For example:
+
 •	Congruent trial: the word “THREE” displayed three times.
 •	Incongruent trial: the word “FOUR” displayed three times.
 •	Standard Cocaine/Crack word trial: the word “PIPE” displayed two times.
 •	Personalized Cocaine/Crack word trial: the word “PLAYSTATION” displayed two times.
 •	Neutral word trial: the word “COUCH” displayed one time.
 •	Emotion word trial: the word “GUILTY” displayed one time.
+
 
 Location and Timing
 This procedure will take place in an MRI laboratory using a study laptop while the participant is in the MRI scanner. The Cocaine Stroop Personalized Word List Interview and the Stroop Task Training Program must be completed prior to this procedure.
