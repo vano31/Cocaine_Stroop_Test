@@ -194,10 +194,10 @@ def Loop(first_seq, first_seqname, second_seq, second_seqname, third_seq, third_
         
         ##Quit Button During Code
         
-        quitbutton = event.getKeys(keyList=['q'])
+        quitbutton = event.getKeys(keyList=['escape'])
         if len(quitbutton) > 0:
             for a in quitbutton:
-                if a == 'q':
+                if a == 'escape':
                     quitTime = str(globalClock.getTime())
                     dataFile.write(f"\nQuit_Time,{quitTime}")
                     dataFile.close()
@@ -242,10 +242,10 @@ def Loop(first_seq, first_seqname, second_seq, second_seqname, third_seq, third_
             
     
             ##Quit Button During Code
-            quitbutton = event.getKeys(keyList=['q'])
+            quitbutton = event.getKeys(keyList=['escape'])
             if len(quitbutton) > 0:
                 for a in quitbutton:
-                    if a == 'q':
+                    if a == 'escape':
                         quitTime = str(globalClock.getTime())
                         dataFile.write(f"\nQuit_Time,{quitTime}")
                         dataFile.close()
@@ -291,10 +291,10 @@ def Loop(first_seq, first_seqname, second_seq, second_seqname, third_seq, third_
             
             
             ##Quit Button During Code
-            quitbutton = event.getKeys(keyList=['q'])
+            quitbutton = event.getKeys(keyList=['escape'])
             if len(quitbutton) > 0:
                 for a in quitbutton:
-                    if a == 'q':
+                    if a == 'escape':
                         quitTime = str(globalClock.getTime())
                         dataFile.write(f"\nQuit_Time,{quitTime}")
                         dataFile.close()
@@ -318,10 +318,10 @@ def Loop(first_seq, first_seqname, second_seq, second_seqname, third_seq, third_
         fixation_cross.draw()
         win.flip()
         ##Quit Button During Code
-        quitbutton = event.getKeys(keyList=['q'])
+        quitbutton = event.getKeys(keyList=['escape'])
         if len(quitbutton) > 0:
             for a in quitbutton:
-                if a == 'q':
+                if a == 'escape':
                     quitTime = str(globalClock.getTime())
                     dataFile.write(f"\nQuit_Time,{quitTime}")
                     dataFile.close()
@@ -335,10 +335,10 @@ def Loop(first_seq, first_seqname, second_seq, second_seqname, third_seq, third_
         
         
         ##Quit Button During Code
-        quitbutton = event.getKeys(keyList=['q'])
+        quitbutton = event.getKeys(keyList=['escape'])
         if len(quitbutton) > 0:
             for a in quitbutton:
-                if a == 'q':
+                if a == 'escape':
                     quitTime = str(globalClock.getTime())
                     dataFile.write(f"\nQuit_Time,{quitTime}")
                     dataFile.close()
@@ -378,10 +378,10 @@ def Loop(first_seq, first_seqname, second_seq, second_seqname, third_seq, third_
         for x in range(120): 
             
             ##Quit Button During Code
-            quitbutton = event.getKeys(keyList=['q'])
+            quitbutton = event.getKeys(keyList=['escape'])
             if len(quitbutton) > 0:
                 for a in quitbutton:
-                    if a == 'q':
+                    if a == 'escape':
                         quitTime = str(globalClock.getTime())
                         dataFile.write(f"\nQuit_Time,{quitTime}")
                         dataFile.close()
@@ -426,10 +426,10 @@ def Loop(first_seq, first_seqname, second_seq, second_seqname, third_seq, third_
             
             
             ##Quit Button During Code
-            quitbutton = event.getKeys(keyList=['q'])
+            quitbutton = event.getKeys(keyList=['escape'])
             if len(quitbutton) > 0:
                 for a in quitbutton:
-                    if a == 'q':
+                    if a == 'escape':
                         quitTime = str(globalClock.getTime())
                         dataFile.write(f"\nQuit_Time,{quitTime}")
                         dataFile.close()
@@ -455,10 +455,10 @@ def Loop(first_seq, first_seqname, second_seq, second_seqname, third_seq, third_
         
         
         ##Quit Button During Code
-        quitbutton = event.getKeys(keyList=['q'])
+        quitbutton = event.getKeys(keyList=['escape'])
         if len(quitbutton) > 0:
             for a in quitbutton:
-                if a == 'q':
+                if a == 'escape':
                     quitTime = str(globalClock.getTime())
                     dataFile.write(f"\nQuit_Time,{quitTime}")
                     dataFile.close()
@@ -473,10 +473,10 @@ def Loop(first_seq, first_seqname, second_seq, second_seqname, third_seq, third_
         
         
         ##Quit Button During Code
-        quitbutton = event.getKeys(keyList=['q'])
+        quitbutton = event.getKeys(keyList=['escape'])
         if len(quitbutton) > 0:
             for a in quitbutton:
-                if a == 'q':
+                if a == 'escape':
                     quitTime = str(globalClock.getTime())
                     dataFile.write(f"\nQuit_Time,{quitTime}")
                     dataFile.close()
@@ -517,10 +517,10 @@ def Loop(first_seq, first_seqname, second_seq, second_seqname, third_seq, third_
             
             
             ##Quit Button During Code
-            quitbutton = event.getKeys(keyList=['q'])
+            quitbutton = event.getKeys(keyList=['escape'])
             if len(quitbutton) > 0:
                 for a in quitbutton:
-                    if a == 'q':
+                    if a == 'escape':
                         quitTime = str(globalClock.getTime())
                         dataFile.write(f"\nQuit_Time,{quitTime}")
                         dataFile.close()
@@ -566,10 +566,10 @@ def Loop(first_seq, first_seqname, second_seq, second_seqname, third_seq, third_
             
             
             ##Quit Button During Code
-            quitbutton = event.getKeys(keyList=['q'])
+            quitbutton = event.getKeys(keyList=['escape'])
             if len(quitbutton) > 0:
                 for a in quitbutton:
-                    if a == 'q':
+                    if a == 'escape':
                         quitTime = str(globalClock.getTime())
                         dataFile.write(f"\nQuit_Time,{quitTime}")
                         dataFile.close()
@@ -622,10 +622,10 @@ for x in range(18):
     fixation_cross.draw()
     win.flip()
     ##Quit Button During Code
-    quitbutton = event.getKeys(keyList=['q'])
+    quitbutton = event.getKeys(keyList=['escape'])
     if len(quitbutton) > 0:
         for a in quitbutton:
-            if a == 'q':
+            if a == 'escape':
                 quitTime = str(globalClock.getTime())
                 dataFile.write(f"\nQuit_Time,{quitTime}")
                 dataFile.close()
@@ -644,8 +644,8 @@ message_content = 'In this task you will count the number of words you see on th
 time_message_shown = str(globalClock.getTime())
 
 '#Instruction 1 gone'
-press_2 = event.waitKeys(keyList=["2",'q'], timeStamped=True)
-if press_2[0][0] == 'q':
+press_2 = event.waitKeys(keyList=["2",'escape'], timeStamped=True)
+if press_2[0][0] == 'escape':
     quitTime = str(globalClock.getTime())
     dataFile.write(f"\nQuit_Time,{quitTime}")
     dataFile.close()
@@ -664,8 +664,8 @@ message_content = 'In this task you will count the number of words you see on th
 time_message_shown = str(globalClock.getTime())
 
 '#Instruction 2 gone'
-press_3 = event.waitKeys(keyList=["3",'q'], timeStamped=True)
-if press_3[0][0] == 'q':
+press_3 = event.waitKeys(keyList=["3",'escape'], timeStamped=True)
+if press_3[0][0] == 'escape':
     quitTime = str(globalClock.getTime())
     dataFile.write(f"\nQuit_Time,{quitTime}")
     dataFile.close()
@@ -685,8 +685,8 @@ message_content = 'In this task you will count the number of words you see on th
 time_message_shown = str(globalClock.getTime())
 
 '#Instruction 3 Gone'
-press_4 = event.waitKeys(keyList=["4", 'q'],timeStamped=True)
-if press_4[0][0] == 'q':
+press_4 = event.waitKeys(keyList=["4", 'escape'],timeStamped=True)
+if press_4[0][0] == 'escape':
     quitTime = str(globalClock.getTime())
     dataFile.write(f"\nQuit_Time,{quitTime}")
     dataFile.close()
@@ -707,8 +707,8 @@ time_message_shown = str(globalClock.getTime())
 
 
 '#Instruction 4 Gone'
-press_5 = event.waitKeys(keyList=["5", 'q'], timeStamped=True)
-if press_5[0][0] == 'q':
+press_5 = event.waitKeys(keyList=["5", 'escape'], timeStamped=True)
+if press_5[0][0] == 'escape':
     quitTime = str(globalClock.getTime())
     dataFile.write(f"\nQuit_Time,{quitTime}")
     dataFile.close()
@@ -727,10 +727,10 @@ time_message_shown = str(globalClock.getTime())
 for x in range(300):
     
     ##Quit Button During Code
-    quitbutton = event.getKeys(keyList=['q'])
+    quitbutton = event.getKeys(keyList=['escape'])
     if len(quitbutton) > 0:
         for a in quitbutton:
-            if a == 'q':
+            if a == 'escape':
                 quitTime = str(globalClock.getTime())
                 dataFile.write(f"\nQuit_Time,{quitTime}")
                 dataFile.close()
@@ -751,10 +751,10 @@ time_message_shown = str(globalClock.getTime())
 for x in range(600):
     
     ##Quit Button During Code
-    quitbutton = event.getKeys(keyList=['q'])
+    quitbutton = event.getKeys(keyList=['escape'])
     if len(quitbutton) > 0:
         for a in quitbutton:
-            if a == 'q':
+            if a == 'escape':
                 quitTime = str(globalClock.getTime())
                 dataFile.write(f"\nQuit_Time,{quitTime}")
                 dataFile.close()
@@ -773,10 +773,10 @@ time_cross_shown = str(globalClock.getTime())
 for x in range(18):
     
     ##Quit Button During Code
-    quitbutton = event.getKeys(keyList=['q'])
+    quitbutton = event.getKeys(keyList=['escape'])
     if len(quitbutton) > 0:
         for a in quitbutton:
-            if a == 'q':
+            if a == 'escape':
                 quitTime = str(globalClock.getTime())
                 dataFile.write(f"\nQuit_Time,{quitTime}")
                 dataFile.close()
@@ -799,8 +799,8 @@ message_content = 'Blank screen (must press b to continue)'
 blank_infinite.draw()
 win.flip()
 time_message_shown = str(globalClock.getTime())
-press_b = event.waitKeys(keyList=["b", 'q'], timeStamped=True)
-if press_b[0][0] == 'q':
+press_b = event.waitKeys(keyList=["b", 'escape'], timeStamped=True)
+if press_b[0][0] == 'escape':
     quitTime = str(globalClock.getTime())
     dataFile.write(f"\nQuit_Time,{quitTime}")
     dataFile.close()
@@ -817,8 +817,8 @@ message_content = "Get Ready"
 get_ready_message.draw()
 win.flip()
 time_message_shown = str(globalClock.getTime())
-press_t_2 = event.waitKeys(keyList=["t", 'q'], timeStamped=True)
-if press_t_2[0][0] == 'q':
+press_t_2 = event.waitKeys(keyList=["t", 'escape'], timeStamped=True)
+if press_t_2[0][0] == 'escape':
     quitTime = str(globalClock.getTime())
     dataFile.write(f"\nQuit_Time,{quitTime}")
     dataFile.close()
@@ -835,10 +835,10 @@ time_cross_shown = str(globalClock.getTime())
 for x in range(18):
     
     ##Quit Button During Code
-    quitbutton = event.getKeys(keyList=['q'])
+    quitbutton = event.getKeys(keyList=['escape'])
     if len(quitbutton) > 0:
         for a in quitbutton:
-            if a == 'q':
+            if a == 'escape':
                 quitTime = str(globalClock.getTime())
                 dataFile.write(f"\nQuit_Time,{quitTime}")
                 dataFile.close()
@@ -860,8 +860,8 @@ message_content = "Blank Screen (must press b to continue)"
 blank_infinite.draw()
 win.flip()
 time_message_shown = str(globalClock.getTime())
-press_b_2 = event.waitKeys(keyList=["b", 'q'], timeStamped=True)
-if press_b_2[0][0] == 'q':
+press_b_2 = event.waitKeys(keyList=["b", 'escape'], timeStamped=True)
+if press_b_2[0][0] == 'escape':
     quitTime = str(globalClock.getTime())
     dataFile.write(f"\nQuit_Time,{quitTime}")
     dataFile.close()
@@ -878,8 +878,8 @@ message_content = "Get Ready"
 get_ready_message.draw()
 win.flip()
 time_message_shown = str(globalClock.getTime())
-press_t_3 = event.waitKeys(keyList=["t", 'q'], timeStamped=True)
-if press_t_3[0][0] == 'q':
+press_t_3 = event.waitKeys(keyList=["t", 'escape'], timeStamped=True)
+if press_t_3[0][0] == 'escape':
     quitTime = str(globalClock.getTime())
     dataFile.write(f"\nQuit_Time,{quitTime}")
     dataFile.close()
@@ -895,10 +895,10 @@ cross_type = "Pre_Loop_3_Cross"
 time_cross_shown = str(globalClock.getTime())
 for x in range(18):
     ##Quit Button During Code
-    quitbutton = event.getKeys(keyList=['q'])
+    quitbutton = event.getKeys(keyList=['escape'])
     if len(quitbutton) > 0:
         for a in quitbutton:
-            if a == 'q':
+            if a == 'escape':
                 quitTime = str(globalClock.getTime())
                 dataFile.write(f"\nQuit_Time,{quitTime}")
                 dataFile.close()
@@ -921,10 +921,10 @@ time_message_shown = str(globalClock.getTime())
 for x in range(1200):
     
     ##Quit Button During Code
-    quitbutton = event.getKeys(keyList=['q'])
+    quitbutton = event.getKeys(keyList=['escape'])
     if len(quitbutton) > 0:
         for a in quitbutton:
-            if a == 'q':
+            if a == 'escape':
                 quitTime = str(globalClock.getTime())
                 dataFile.write(f"\nQuit_Time,{quitTime}")
                 dataFile.close()
