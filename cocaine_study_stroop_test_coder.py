@@ -4,16 +4,30 @@ import numpy, random, csv, json, os, openpyxl
 from openpyxl import Workbook
 
 
-expInfo = {'Subject ID': '', 'Session Number': ''} ###Change to subject id
+expInfo = {'Subject ID': '', 'Session Number': '', 'Start Program From': ['Beginning (Loop 1)','Loop 2','Loop 3']} ###Change to subject id
 expInfo['dateStr'] = data.getDateStr()
 
 ########present a dialogue to change params
 
-dlg = gui.DlgFromDict(expInfo, title='Cocaine Study Stroop Test', fixed=['dateStr'], order=['Subject ID','Session Number'])
+dlg = gui.DlgFromDict(expInfo, title='Cocaine Study Stroop Test', fixed=['dateStr'], order=['Subject ID','Session Number','Start Program From'])
+#dlg.addField(initial = 'Start Program From:', choices=['Beginning (Loop 1)','Loop 2','Loop 3'])
 if dlg.OK:
     toFile('lastParams.pickle', expInfo) #save params to file for next time
 else:
     core.quit() #the user hit cancel, so exit
+    
+#########Definition of Variable start_loop --> Used to determine which loop the program undergoes
+
+start_loop = ''
+
+if expInfo['Start Program From'] == 'Beginning (Loop 1)':
+    start_loop = 'loop_1'
+elif expInfo['Start Program From'] == 'Loop 2':
+    start_loop = 'loop_2'
+elif expInfo['Start Program From'] == 'Loop 3':
+    start_loop = 'loop_3'
+
+print('Starting Program with ' + start_loop)
 
 #########Definition of Global Clock --> Used to keep track of the time words/fixation crosses appear and disappear, and GLOBAL time the first button was clicked
 
@@ -21,12 +35,12 @@ globalClock = core.Clock()
 
 
 ############make a csv file to store the data- intro data
-fileName_intro_data = expInfo['Subject ID'] + '_' + expInfo['Session Number'] + '_IntroData_CocaineStroopTest' + expInfo['dateStr']
+fileName_intro_data = expInfo['Subject ID'] + '_' + expInfo['Session Number'] + '_start_from_' + start_loop +'_IntroData_CocaineStroopTest' + expInfo['dateStr']
 dataFile_intro_data = open('data/' + fileName_intro_data + '.csv', 'w') # a simple text file with comma seperated values
 #dataFile.write('sequence,thisN,thisRepN,word,wordtype,number_on_screen,correctAnswer,key_pressed,correct,time_button_pressed_relative, buttonClickedList, time_word_shown_global, time_button_pressed_global, time_word_gone_global, time_cross_shown_global, time_cross_gone_global \n')
 
 ############make a csv file to store the data- test data
-fileName = expInfo['Subject ID'] + '_' + expInfo['Session Number'] + '_CocaineStroopTest' + expInfo['dateStr']
+fileName = expInfo['Subject ID'] + '_' + expInfo['Session Number'] + '_start_from_' + start_loop + '_CocaineStroopTest' + expInfo['dateStr']
 dataFile = open('data/' + fileName + '.csv', 'w') # a simple text file with comma seperated values
 dataFile.write('sequence,thisN,thisRepN,word,wordtype,number_on_screen,correctAnswer,key_pressed,correct,time_button_pressed_relative, buttonClickedList, time_word_shown_global, time_button_pressed_global, time_word_gone_global, time_cross_shown_global, time_cross_gone_global \n')
 
@@ -507,10 +521,10 @@ def Loop(first_seq, first_seqname, second_seq, second_seqname, third_seq, third_
         time_cross_gone_global = None 
         
         time_button_pressed_global_bool = True ##Exists to make sure that the global time for only the first button press is recorded, not all the others
-        
+            
         ##Reset trialClock Right before image is shown for 2 seconds
         trialClock.reset()
-
+            
         ##The 2 seconds (120 frames) where the image is shown
         time_word_shown_global = str(globalClock.getTime())
         for x in range(120): 
@@ -540,11 +554,11 @@ def Loop(first_seq, first_seqname, second_seq, second_seqname, third_seq, third_
                 if time_button_pressed_global_bool == True:
                     time_button_pressed_global = str(globalClock.getTime())
                     time_button_pressed_global_bool = False
-        
+            
         time_word_gone_global = str(globalClock.getTime())
         trialClock.reset() 
                 
-        
+            
         if len(buttonsClickedList) > 0:
             key_pressed = buttonsClickedList[0][0]
             time_button_pressed_relative = buttonsClickedList[0][1]
@@ -742,177 +756,195 @@ for x in range(300):
 time_message_gone = str(globalClock.getTime())
 dataFile_intro_data.write(f"message_number,{message_number},{empty_cell},message_content,{message_content},{empty_cell},time_message_shown,{time_message_shown},{empty_cell},time_message_gone,{time_message_gone},{empty_cell}\n\n")
 
-    
-#8. Display get_ready screen for 10 seconds (600 frames)
 
-message_number = "Pre_Loop_1_Get_Ready"
-message_content = 'Get Ready'
-time_message_shown = str(globalClock.getTime())
-for x in range(600):
-    
-    ##Quit Button During Code
-    quitbutton = event.getKeys(keyList=['escape'])
-    if len(quitbutton) > 0:
-        for a in quitbutton:
-            if a == 'escape':
-                quitTime = str(globalClock.getTime())
-                dataFile.write(f"\nQuit_Time,{quitTime}")
-                dataFile.close()
-                dataFile_intro_data.close()
-                core.quit()
-    
+#################################-Loop 1 Function
+
+def runLoop1():
+    #8. Display get_ready screen for 10 seconds (600 frames)
+    message_number = "Pre_Loop_1_Get_Ready"
+    message_content = 'Get Ready'
+    time_message_shown = str(globalClock.getTime())
+    for x in range(600):
+        
+        ##Quit Button During Code
+        quitbutton = event.getKeys(keyList=['escape'])
+        if len(quitbutton) > 0:
+            for a in quitbutton:
+                if a == 'escape':
+                    quitTime = str(globalClock.getTime())
+                    dataFile.write(f"\nQuit_Time,{quitTime}")
+                    dataFile.close()
+                    dataFile_intro_data.close()
+                    core.quit()
+        
+        get_ready_message.draw()
+        win.flip()
+    time_message_gone = str(globalClock.getTime())
+    dataFile_intro_data.write(f"message_number,{message_number},{empty_cell},message_content,{message_content},{empty_cell},time_message_shown,{time_message_shown},{empty_cell},time_message_gone,{time_message_gone},{empty_cell}\n\n")
+
+
+    #9. Display 300ms (18 frames) Cross Fixation Prior to Loop 1
+    cross_type = "Pre_Loop_1_Cross"
+    time_cross_shown = str(globalClock.getTime())
+    for x in range(18):
+        
+        ##Quit Button During Code
+        quitbutton = event.getKeys(keyList=['escape'])
+        if len(quitbutton) > 0:
+            for a in quitbutton:
+                if a == 'escape':
+                    quitTime = str(globalClock.getTime())
+                    dataFile.write(f"\nQuit_Time,{quitTime}")
+                    dataFile.close()
+                    dataFile_intro_data.close()
+                    core.quit()
+        
+        fixation_cross.draw()
+        win.flip()
+    time_cross_gone = str(globalClock.getTime())
+    dataFile_intro_data.write(f"cross_type,{cross_type},time_cross_shown,{time_cross_shown},{empty_cell},time_cross_gone,{time_cross_gone}\n\n")
+
+    #10 Loop 1
+
+    Loop(seq_1_1, "seq_1_1", seq_1_2_ic, "seq_1_2_ic", seq_1_3, "seq_1_3")
+
+
+    #11 Display Blank Infinite after Loop 1 (press b to continue)
+    message_number = 'After_Loop_1_Infinite_Blank'
+    message_content = 'Blank screen (must press b to continue)'
+    blank_infinite.draw()
+    win.flip()
+    time_message_shown = str(globalClock.getTime())
+    press_b = event.waitKeys(keyList=["b", 'escape'], timeStamped=True)
+    if press_b[0][0] == 'escape':
+        quitTime = str(globalClock.getTime())
+        dataFile.write(f"\nQuit_Time,{quitTime}")
+        dataFile.close()
+        dataFile_intro_data.close()
+        core.quit()
+    button_pressed = press_b[0][0]
+    time_button_pressed = str(globalClock.getTime())
+    dataFile_intro_data.write(f"message_number,{message_number},{empty_cell},message_content,{message_content},{empty_cell},time_message_shown,{time_message_shown},{empty_cell},button_pressed,{button_pressed},{empty_cell}, time_button_pressed,{time_button_pressed},{empty_cell}\n\n")
+
+
+#####################################-Loop 2 Function
+
+def runLoop2():
+    #12 Display Get Ready (press t to continue)
+    message_number = "Pre_Loop_2_Get_Ready"
+    message_content = "Get Ready"
     get_ready_message.draw()
     win.flip()
-time_message_gone = str(globalClock.getTime())
-dataFile_intro_data.write(f"message_number,{message_number},{empty_cell},message_content,{message_content},{empty_cell},time_message_shown,{time_message_shown},{empty_cell},time_message_gone,{time_message_gone},{empty_cell}\n\n")
+    time_message_shown = str(globalClock.getTime())
+    press_t_2 = event.waitKeys(keyList=["t", 'escape'], timeStamped=True)
+    if press_t_2[0][0] == 'escape':
+        quitTime = str(globalClock.getTime())
+        dataFile.write(f"\nQuit_Time,{quitTime}")
+        dataFile.close()
+        dataFile_intro_data.close()
+        core.quit()
+    button_pressed = press_t_2[0][0]
+    time_button_pressed = str(globalClock.getTime())
+    dataFile_intro_data.write(f"message_number,{message_number},{empty_cell},message_content,{message_content},{empty_cell},time_message_shown,{time_message_shown},{empty_cell},button_pressed,{button_pressed},{empty_cell}, time_button_pressed,{time_button_pressed},{empty_cell}\n\n")
 
 
-#9. Display 300ms (18 frames) Cross Fixation Prior to Loop 1
-cross_type = "Pre_Loop_1_Cross"
-time_cross_shown = str(globalClock.getTime())
-for x in range(18):
-    
-    ##Quit Button During Code
-    quitbutton = event.getKeys(keyList=['escape'])
-    if len(quitbutton) > 0:
-        for a in quitbutton:
-            if a == 'escape':
-                quitTime = str(globalClock.getTime())
-                dataFile.write(f"\nQuit_Time,{quitTime}")
-                dataFile.close()
-                dataFile_intro_data.close()
-                core.quit()
-    
-    fixation_cross.draw()
+    #13. Display 300ms (18 frames) Cross Fixation Prior to Loop 2
+    cross_type = "Pre_Loop_2_Cross"
+    time_cross_shown = str(globalClock.getTime())
+    for x in range(18):
+        
+        ##Quit Button During Code
+        quitbutton = event.getKeys(keyList=['escape'])
+        if len(quitbutton) > 0:
+            for a in quitbutton:
+                if a == 'escape':
+                    quitTime = str(globalClock.getTime())
+                    dataFile.write(f"\nQuit_Time,{quitTime}")
+                    dataFile.close()
+                    dataFile_intro_data.close()
+                    core.quit()
+        
+        fixation_cross.draw()
+        win.flip()
+    time_cross_gone = str(globalClock.getTime())
+    dataFile_intro_data.write(f"cross_type,{cross_type},time_cross_shown,{time_cross_shown},{empty_cell},time_cross_gone,{time_cross_gone}\n\n")
+
+    #14. Loop 2
+
+    Loop(seq_2_1, "seq_2_1", seq_2_2_ic, "seq_2_2_ic", seq_2_3, "seq_2_3")
+
+    #15 Display Blank Infinite after Loop 2 (press b to continue)
+    message_number = "After_Loop_2_Infinite_Blank"
+    message_content = "Blank Screen (must press b to continue)"
+    blank_infinite.draw()
     win.flip()
-time_cross_gone = str(globalClock.getTime())
-dataFile_intro_data.write(f"cross_type,{cross_type},time_cross_shown,{time_cross_shown},{empty_cell},time_cross_gone,{time_cross_gone}\n\n")
-
-#10 Loop 1
-
-Loop(seq_1_1, "seq_1_1", seq_1_2_ic, "seq_1_2_ic", seq_1_3, "seq_1_3")
-
-
-#11 Display Blank Infinite after Loop 1 (press b to continue)
-message_number = 'After_Loop_1_Infinite_Blank'
-message_content = 'Blank screen (must press b to continue)'
-blank_infinite.draw()
-win.flip()
-time_message_shown = str(globalClock.getTime())
-press_b = event.waitKeys(keyList=["b", 'escape'], timeStamped=True)
-if press_b[0][0] == 'escape':
-    quitTime = str(globalClock.getTime())
-    dataFile.write(f"\nQuit_Time,{quitTime}")
-    dataFile.close()
-    dataFile_intro_data.close()
-    core.quit()
-button_pressed = press_b[0][0]
-time_button_pressed = str(globalClock.getTime())
-dataFile_intro_data.write(f"message_number,{message_number},{empty_cell},message_content,{message_content},{empty_cell},time_message_shown,{time_message_shown},{empty_cell},button_pressed,{button_pressed},{empty_cell}, time_button_pressed,{time_button_pressed},{empty_cell}\n\n")
+    time_message_shown = str(globalClock.getTime())
+    press_b_2 = event.waitKeys(keyList=["b", 'escape'], timeStamped=True)
+    if press_b_2[0][0] == 'escape':
+        quitTime = str(globalClock.getTime())
+        dataFile.write(f"\nQuit_Time,{quitTime}")
+        dataFile.close()
+        dataFile_intro_data.close()
+        core.quit()
+    button_pressed = press_b_2[0][0]
+    time_button_pressed = str(globalClock.getTime())
+    dataFile_intro_data.write(f"message_number,{message_number},{empty_cell},message_content,{message_content},{empty_cell},time_message_shown,{time_message_shown},{empty_cell},button_pressed,{button_pressed},{empty_cell}, time_button_pressed,{time_button_pressed},{empty_cell}\n\n")
 
 
-#12 Display Get Ready (press t to continue)
-message_number = "Pre_Loop_2_Get_Ready"
-message_content = "Get Ready"
-get_ready_message.draw()
-win.flip()
-time_message_shown = str(globalClock.getTime())
-press_t_2 = event.waitKeys(keyList=["t", 'escape'], timeStamped=True)
-if press_t_2[0][0] == 'escape':
-    quitTime = str(globalClock.getTime())
-    dataFile.write(f"\nQuit_Time,{quitTime}")
-    dataFile.close()
-    dataFile_intro_data.close()
-    core.quit()
-button_pressed = press_t_2[0][0]
-time_button_pressed = str(globalClock.getTime())
-dataFile_intro_data.write(f"message_number,{message_number},{empty_cell},message_content,{message_content},{empty_cell},time_message_shown,{time_message_shown},{empty_cell},button_pressed,{button_pressed},{empty_cell}, time_button_pressed,{time_button_pressed},{empty_cell}\n\n")
+###########################################-Loop 3
 
-
-#13. Display 300ms (18 frames) Cross Fixation Prior to Loop 2
-cross_type = "Pre_Loop_2_Cross"
-time_cross_shown = str(globalClock.getTime())
-for x in range(18):
-    
-    ##Quit Button During Code
-    quitbutton = event.getKeys(keyList=['escape'])
-    if len(quitbutton) > 0:
-        for a in quitbutton:
-            if a == 'escape':
-                quitTime = str(globalClock.getTime())
-                dataFile.write(f"\nQuit_Time,{quitTime}")
-                dataFile.close()
-                dataFile_intro_data.close()
-                core.quit()
-    
-    fixation_cross.draw()
+def runLoop3():
+    #16 Display Get Ready (press t to continue)
+    message_number = "Pre_Loop_3_Get_Ready"
+    message_content = "Get Ready"
+    get_ready_message.draw()
     win.flip()
-time_cross_gone = str(globalClock.getTime())
-dataFile_intro_data.write(f"cross_type,{cross_type},time_cross_shown,{time_cross_shown},{empty_cell},time_cross_gone,{time_cross_gone}\n\n")
-
-#14. Loop 2
-
-Loop(seq_2_1, "seq_2_1", seq_2_2_ic, "seq_2_2_ic", seq_2_3, "seq_2_3")
-
-#15 Display Blank Infinite after Loop 2 (press b to continue)
-message_number = "After_Loop_2_Infinite_Blank"
-message_content = "Blank Screen (must press b to continue)"
-blank_infinite.draw()
-win.flip()
-time_message_shown = str(globalClock.getTime())
-press_b_2 = event.waitKeys(keyList=["b", 'escape'], timeStamped=True)
-if press_b_2[0][0] == 'escape':
-    quitTime = str(globalClock.getTime())
-    dataFile.write(f"\nQuit_Time,{quitTime}")
-    dataFile.close()
-    dataFile_intro_data.close()
-    core.quit()
-button_pressed = press_b_2[0][0]
-time_button_pressed = str(globalClock.getTime())
-dataFile_intro_data.write(f"message_number,{message_number},{empty_cell},message_content,{message_content},{empty_cell},time_message_shown,{time_message_shown},{empty_cell},button_pressed,{button_pressed},{empty_cell}, time_button_pressed,{time_button_pressed},{empty_cell}\n\n")
+    time_message_shown = str(globalClock.getTime())
+    press_t_3 = event.waitKeys(keyList=["t", 'escape'], timeStamped=True)
+    if press_t_3[0][0] == 'escape':
+        quitTime = str(globalClock.getTime())
+        dataFile.write(f"\nQuit_Time,{quitTime}")
+        dataFile.close()
+        dataFile_intro_data.close()
+        core.quit()
+    button_pressed = press_t_3[0][0]
+    time_button_pressed = str(globalClock.getTime())
+    dataFile_intro_data.write(f"message_number,{message_number},{empty_cell},message_content,{message_content},{empty_cell},time_message_shown,{time_message_shown},{empty_cell},button_pressed,{button_pressed},{empty_cell}, time_button_pressed,{time_button_pressed},{empty_cell}\n\n")
 
 
-#16 Display Get Ready (press t to continue)
-message_number = "Pre_Loop_3_Get_Ready"
-message_content = "Get Ready"
-get_ready_message.draw()
-win.flip()
-time_message_shown = str(globalClock.getTime())
-press_t_3 = event.waitKeys(keyList=["t", 'escape'], timeStamped=True)
-if press_t_3[0][0] == 'escape':
-    quitTime = str(globalClock.getTime())
-    dataFile.write(f"\nQuit_Time,{quitTime}")
-    dataFile.close()
-    dataFile_intro_data.close()
-    core.quit()
-button_pressed = press_t_3[0][0]
-time_button_pressed = str(globalClock.getTime())
-dataFile_intro_data.write(f"message_number,{message_number},{empty_cell},message_content,{message_content},{empty_cell},time_message_shown,{time_message_shown},{empty_cell},button_pressed,{button_pressed},{empty_cell}, time_button_pressed,{time_button_pressed},{empty_cell}\n\n")
+    #17. Display 300ms (18 frames) Cross Fixation Prior to Loop 3
+    cross_type = "Pre_Loop_3_Cross"
+    time_cross_shown = str(globalClock.getTime())
+    for x in range(18):
+        ##Quit Button During Code
+        quitbutton = event.getKeys(keyList=['escape'])
+        if len(quitbutton) > 0:
+            for a in quitbutton:
+                if a == 'escape':
+                    quitTime = str(globalClock.getTime())
+                    dataFile.write(f"\nQuit_Time,{quitTime}")
+                    dataFile.close()
+                    dataFile_intro_data.close()
+                    core.quit()
+        
+        fixation_cross.draw()
+        win.flip()
+    time_cross_gone = str(globalClock.getTime())
+    dataFile_intro_data.write(f"cross_type,{cross_type},time_cross_shown,{time_cross_shown},{empty_cell},time_cross_gone,{time_cross_gone}\n\n")
+
+    #18 Loop 3
+    Loop(seq_3_1, "seq_3_1", seq_3_2_ic, "seq_3_2_ic", seq_3_3, "seq_3_3")
 
 
-#17. Display 300ms (18 frames) Cross Fixation Prior to Loop 3
-cross_type = "Pre_Loop_3_Cross"
-time_cross_shown = str(globalClock.getTime())
-for x in range(18):
-    ##Quit Button During Code
-    quitbutton = event.getKeys(keyList=['escape'])
-    if len(quitbutton) > 0:
-        for a in quitbutton:
-            if a == 'escape':
-                quitTime = str(globalClock.getTime())
-                dataFile.write(f"\nQuit_Time,{quitTime}")
-                dataFile.close()
-                dataFile_intro_data.close()
-                core.quit()
-    
-    fixation_cross.draw()
-    win.flip()
-time_cross_gone = str(globalClock.getTime())
-dataFile_intro_data.write(f"cross_type,{cross_type},time_cross_shown,{time_cross_shown},{empty_cell},time_cross_gone,{time_cross_gone}\n\n")
-
-#18 Loop 3
-Loop(seq_3_1, "seq_3_1", seq_3_2_ic, "seq_3_2_ic", seq_3_3, "seq_3_3")
-
+if start_loop == 'loop_1':
+    runLoop1()
+    runLoop2()
+    runLoop3()
+elif start_loop == 'loop_2':
+    runLoop2()
+    runLoop3()
+elif start_loop == 'loop_3':
+    runLoop3()
 
 #19 Display Goodbye Screen (for 20 seconds)
 message_number = "Post_Loop_3_Goodbye_Message"
