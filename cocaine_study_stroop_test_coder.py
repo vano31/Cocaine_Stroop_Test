@@ -4,7 +4,7 @@ import numpy, random, csv, json, os, openpyxl
 from openpyxl import Workbook
 
 
-expInfo = {'Subject ID': '', 'Session Number': '', 'Start Program From': ['Beginning (Loop 1)','Loop 2','Loop 3']} ###Change to subject id
+expInfo = {'Subject ID': '', 'Session Number': '', 'Start Task From': ['Beginning (Run 1)','Run 2','Run 3']} ###Change to subject id
 expInfo['dateStr'] = data.getDateStr()
 
 ########present a dialogue to change params
@@ -20,14 +20,14 @@ else:
 
 start_loop = ''
 
-if expInfo['Start Program From'] == 'Beginning (Loop 1)':
+if expInfo['Start Task From'] == 'Beginning (Run 1)':
     start_loop = 'loop_1'
-elif expInfo['Start Program From'] == 'Loop 2':
+elif expInfo['Start Task From'] == 'Run 2':
     start_loop = 'loop_2'
-elif expInfo['Start Program From'] == 'Loop 3':
+elif expInfo['Start Task From'] == 'Run 3':
     start_loop = 'loop_3'
 
-print('Starting Program with ' + start_loop)
+print('Starting Task with ' + start_loop)
 
 #########Definition of Global Clock --> Used to keep track of the time words/fixation crosses appear and disappear, and GLOBAL time the first button was clicked
 
